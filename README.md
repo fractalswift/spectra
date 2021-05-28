@@ -2,6 +2,14 @@
 
 # v1
 
+### To download
+
+1. Open command prompt
+
+2. Run `git clone https://github.com/fractalswift/spectra.git`
+
+3. Navigate to spectra: `cd spectra`
+
 ### To set up:
 
 1.  create virtual env. This isn't essential but will likely save you a headache later:
