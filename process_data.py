@@ -8,7 +8,9 @@ from matplotlib import pyplot as plt
 def get_paths():
     """Get file name of all data in data_input folder"""
 
-    return os.listdir('data_input')
+    paths = os.listdir('data_input')
+
+    return filter(lambda x: x != ".gitignore", paths)
 
 
 def import_and_clean(path):
