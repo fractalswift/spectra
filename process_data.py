@@ -75,17 +75,27 @@ def calculate_avgs(df):
 
 if __name__ == "__main__":
 
-    paths = get_paths()
+    try:
 
-    data_sets = [import_and_clean(f"./data_input/{path}") for path in paths]
+        paths = get_paths()
 
-    dfs_with_name = [(data_set[0], pd.DataFrame(data_set[1]))
-                     for data_set in data_sets]
+        data_sets = [import_and_clean(
+            f"./data_input/{path}") for path in paths]
 
-    for tuple in dfs_with_name:
+        dfs_with_name = [(data_set[0], pd.DataFrame(data_set[1]))
+                         for data_set in data_sets]
 
-        name, df = tuple
-        avg_df = calculate_avgs(df)
+        for tuple in dfs_with_name:
 
-        plt.plot(avg_df)
-        plt.savefig(f"./graph_output/{name}.png")
+            name, df = tuple
+            avg_df = calculate_avgs(df)
+
+            plt.plot(avg_df)
+            plt.savefig(f"./graph_output/{name}.png")
+
+        print("Hello K-tyn, your new graphs are in graph_output/")
+        print("Have a nice day :)")
+
+    except Exception:
+
+        print("Hello K-tyn, there was a problem making your graphs :(")
