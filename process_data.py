@@ -43,12 +43,14 @@ def calculate_avgs(df):
 
         if col != "x":
 
+            # just take the first character of the column
+            # since naming convetino is 1_01, 1_02 etc we want just "1"
             spectra.append(col[0])
 
+    # remove duplicates
     spectra = set(spectra)
 
     # now put them in a dict
-
     spec_dict = {}
 
     for col in spectra:
@@ -62,7 +64,6 @@ def calculate_avgs(df):
             spec_dict[col[0]].append(df[col])
 
     # calculate the averages
-
     avg_df = pd.DataFrame()
 
     for k, v in spec_dict.items():
@@ -70,7 +71,6 @@ def calculate_avgs(df):
         avg_df[k] = sum(v) / len(v)
 
     # add the x column back in
-
     avg_df["x"] = df["x"]
 
     avg_df = avg_df.reindex(sorted(avg_df.columns), axis=1)
