@@ -34,8 +34,16 @@
 
 ### To use:
 
-1. Drop your json files into the data_input folder
+1. Activate your virtual env if it is not activated: `activate`. If you don't have a virtual env don't worry about this.
 
-2. Run `python process_data.py`
+2. Drop your json files into the data_input folder
 
-3. Graphs hopefully now appear in graph_output
+3. Run `python process_data.py`
+
+4. Graphs hopefully now appear in graph_output
+
+### Trouble shooting
+
+The virtual env stuff just creates an isolated environment for python dependencies. If it doesn't work you can skip it but will just have to make sure you have the right dependencies (in this case just pandas). It might also require that you run the file with "python3" instead of just "python":
+
+      python3 process_data.py

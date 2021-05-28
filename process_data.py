@@ -1,4 +1,3 @@
-from typing import Collection
 import pandas as pd
 import json
 import os
