@@ -76,6 +76,28 @@ def calculate_avgs(df):
     return avg_df
 
 
+def create_plot(tuple):
+
+    name, df = tuple
+    avg_df = calculate_avgs(df)
+
+    x = avg_df["x"]
+
+    avgs = avg_df.drop(["x"], axis=1)
+
+    for col in avgs.columns:
+
+        plt.plot(x, avgs[col], label=col)
+
+        plt.title("Spectrophotometer results")
+        plt.xlabel("Wavenumbers")
+        plt.ylabel("Signal Intensity")
+        plt.legend(title="Set averages")
+        plt.savefig(f"./graph_output/{name}.png")
+
+    plt.close()
+
+
 if __name__ == "__main__":
 
     try:
@@ -90,23 +112,12 @@ if __name__ == "__main__":
 
         for tuple in dfs_with_name:
 
-            name, df = tuple
-            avg_df = calculate_avgs(df)
-
-            x = avg_df["x"]
-
-            avgs = avg_df.drop(["x"], axis=1)
-
-            plt.plot(x, avgs)
-
-            plt.title("Spectrophotometer results")
-            plt.xlabel("Wavenumbers")
-            plt.ylabel("Signal Intensity")
-            plt.savefig(f"./graph_output/{name}.png")
+            create_plot(tuple)
 
         print("Hello K-tyn, your new graphs are in graph_output/")
         print("Have a nice day :)")
 
-    except Exception:
+    except Exception as e:
 
         print("Hello K-tyn, there was a problem making your graphs :(")
+        print(f"The error message is: {str(e)}")
