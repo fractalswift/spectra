@@ -61,13 +61,17 @@ def calculate_avgs(df):
 
             spec_dict[col[0]].append(df[col])
 
-    # finally, calculate the averages and return a new df
+    # calculate the averages
 
     avg_df = pd.DataFrame()
 
     for k, v in spec_dict.items():
 
         avg_df[k] = sum(v) / len(v)
+
+    # add the x column back in
+
+    avg_df["x"] = df["x"]
 
     return avg_df
 
@@ -89,7 +93,15 @@ if __name__ == "__main__":
             name, df = tuple
             avg_df = calculate_avgs(df)
 
-            plt.plot(avg_df)
+            x = avg_df["x"]
+
+            avgs = avg_df.drop(["x"], axis=1)
+
+            plt.plot(x, avgs)
+
+            plt.title("Spectrophotometer results")
+            plt.xlabel("Wavenumbers")
+            plt.ylabel("Signal Intensity")
             plt.savefig(f"./graph_output/{name}.png")
 
         print("Hello K-tyn, your new graphs are in graph_output/")
