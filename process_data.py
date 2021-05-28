@@ -79,6 +79,7 @@ def calculate_avgs(df):
 
 
 def create_plot(tuple):
+    """Accept  tuple of (name, df) and save a png of the plot of x / sets"""
 
     name, df = tuple
     avg_df = calculate_avgs(df)
