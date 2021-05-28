@@ -73,6 +73,8 @@ def calculate_avgs(df):
 
     avg_df["x"] = df["x"]
 
+    avg_df = avg_df.reindex(sorted(avg_df.columns), axis=1)
+
     return avg_df
 
 
