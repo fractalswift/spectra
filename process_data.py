@@ -78,7 +78,7 @@ def calculate_avgs(df):
     return avg_df
 
 
-def create_plot(tuple):
+def plot_set_averages(tuple):
     """Accept  tuple of (name, df) and save a png of the plot of x / sets"""
 
     name, df = tuple
@@ -92,11 +92,34 @@ def create_plot(tuple):
 
         plt.plot(x, avgs[col], label=col)
 
-        plt.title("Spectrophotometer results")
+        plt.title(f"Scan {col}")
         plt.xlabel("Wavenumbers")
         plt.ylabel("Signal Intensity")
         plt.legend(title="Set averages")
-        plt.savefig(f"./graph_output/{name}.png")
+        plt.savefig(f"./graph_output/{name}-SET-{col}.png")
+
+        plt.close()
+
+
+def plot_big_average(tuple):
+    """Accept  tuple of (name, df) and save a png of the plot of x / (average of all sets)"""
+
+    name = tuple[0]
+    df = tuple[1]
+    df = calculate_avgs(df)
+
+    x = df["x"]
+    just_avgs = df.drop(["x"], 1)
+
+    all_avgs = just_avgs.mean(axis=1)
+
+    plt.plot(x, all_avgs, label="Average")
+
+    plt.title("Composite Spectrum")
+    plt.xlabel("Wavenumbers")
+    plt.ylabel("Signal Intensity")
+    plt.legend(title="Set averages")
+    plt.savefig(f"./graph_output/{name}-ALL_SETS_AVG.png")
 
     plt.close()
 
@@ -115,7 +138,8 @@ if __name__ == "__main__":
 
         for tuple in dfs_with_name:
 
-            create_plot(tuple)
+            plot_big_average(tuple)
+            plot_set_averages(tuple)
 
         print("Hello K-tyn, your new graphs are in graph_output/")
         print("Have a nice day :)")
