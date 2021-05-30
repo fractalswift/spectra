@@ -95,7 +95,6 @@ def plot_set_averages(tuple):
         plt.title(f"Scan {col}")
         plt.xlabel("Wavenumbers")
         plt.ylabel("Signal Intensity")
-        plt.legend(title="Set averages")
         plt.savefig(f"./graph_output/{name}-SET-{col}.png")
 
         plt.close()
@@ -118,7 +117,6 @@ def plot_big_average(tuple):
     plt.title("Composite Spectrum")
     plt.xlabel("Wavenumbers")
     plt.ylabel("Signal Intensity")
-    plt.legend(title="Set averages")
     plt.savefig(f"./graph_output/{name}-ALL_SETS_AVG.png")
 
     plt.close()
