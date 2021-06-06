@@ -70,7 +70,7 @@ def calculate_avgs(df):
 
     for k, v in spec_dict.items():
 
-        # take the average of each set df and put the column into the avg df
+        # take the average (row-wise) of each set df and put the column into the avg df
         avg_df[k] = v.mean(axis=1)
 
     # add the x column back in so we can use it for plotting later
