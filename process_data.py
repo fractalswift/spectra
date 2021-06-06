@@ -53,27 +53,53 @@ def calculate_avgs(df):
     # now put them in a dict
     spec_dict = {}
 
+    # Make a key for each SET so 1, 2, 3, 4, 5
     for col in spectra:
 
-        spec_dict[col] = []
+        # spec_dict[col] = []
+        spec_dict[col] = pd.DataFrame()
 
+    print(f"spec dict cols: ", spec_dict.keys())
+
+    # Now put each Y under the correct key, e.g 1_01 and 1_02 both go in set key 1
     for col in df.columns:
 
         if col != "x":
 
-            spec_dict[col[0]].append(df[col])
+            # spec_dict[col[0]].append(df[col])
+
+            spec_dict[col[0]][col] = df[col]
+
+    # TODO write a test - we expect there to be 5 columns for each set key
+
+    for k, v in spec_dict.items():
+        print(f"set {k} has {len(v.columns)} columns in it")
+
+        print(f"each column of {k} has {len(v)} rows in it")
+
+        print(f"the type of data is {type(v)}")
 
     # calculate the averages
+
     avg_df = pd.DataFrame()
+
+    # print(avg_df.columns)
 
     for k, v in spec_dict.items():
 
-        avg_df[k] = sum(v) / len(v)
+        # take the average of each set df and put the column into the avg df
 
-    # add the x column back in
+        avg_df[k] = v.mean(axis=1)
+
+        # avg_df[k] = sum(v) / len(v)
+
+    # # add the x column back in
     avg_df["x"] = df["x"]
 
+    # sort the columns numerically - its just upsetting to look at otherwise
     avg_df = avg_df.reindex(sorted(avg_df.columns), axis=1)
+
+    print(avg_df.head())
 
     return avg_df
 
