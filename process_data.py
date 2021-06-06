@@ -13,10 +13,13 @@ def get_paths():
 
 
 def import_and_clean(path):
-    """Import the json data and drop the metadata array and the raw arrays"""
+    """Import the json data and drop the metadata array and the 'raw' arrays"""
 
     with open(path) as json_file:
         data = json.load(json_file)
+
+    # TODO - a function to validate data schema / throw error
+    # if unexpected values might be useful here
 
     clean_data = {}
 
@@ -33,73 +36,48 @@ def import_and_clean(path):
 
 
 def calculate_avgs(df):
-    """Accept a dataframe and return it with average sets only"""
+    """Accept a dataframe of all scans for multiple sets and return a new dataframe 
+        with average of each set only"""
 
-    # work out how many spectra there are from the column names:
-
-    spectra = []
-
-    for col in df.columns:
-
-        if col != "x":
-
-            # just take the first character of the column
-            # since naming convetino is 1_01, 1_02 etc we want just "1"
-            spectra.append(col[0])
-
-    # remove duplicates
-    spectra = set(spectra)
-
-    # now put them in a dict
+    # first make a dictionary where each key is a set name and each value
+    # is an empty dataframe
     spec_dict = {}
 
-    # Make a key for each SET so 1, 2, 3, 4, 5
-    for col in spectra:
-
-        # spec_dict[col] = []
-        spec_dict[col] = pd.DataFrame()
-
-    print(f"spec dict cols: ", spec_dict.keys())
-
-    # Now put each Y under the correct key, e.g 1_01 and 1_02 both go in set key 1
     for col in df.columns:
 
         if col != "x":
 
-            # spec_dict[col[0]].append(df[col])
+            # just take the first character of the column to find out what set
+            # a scan belongs to
+            # since naming convention is 1_01, 1_02 etc we want just "1"
+            # we don't need to check for existing key - will just overwrite with same key
+            spec_dict[col[0]] = pd.DataFrame()
 
-            spec_dict[col[0]][col] = df[col]
+    # Now put each Y (scan) column under the correct key (set name),
+    # e.g 1_01 and 1_02 both go in set key 1
+    for col in df.columns:
 
-    # TODO write a test - we expect there to be 5 columns for each set key
+        if col != "x":
 
-    for k, v in spec_dict.items():
-        print(f"set {k} has {len(v.columns)} columns in it")
+            # we cknow which set the scan belongs to
+            # by taking its first character e.g 1_01 belongs to set 1
+            set_name = col[0]
 
-        print(f"each column of {k} has {len(v)} rows in it")
+            spec_dict[set_name][col] = df[col]
 
-        print(f"the type of data is {type(v)}")
-
-    # calculate the averages
-
+    # now we findally get to the part where we calculate the averages
     avg_df = pd.DataFrame()
-
-    # print(avg_df.columns)
 
     for k, v in spec_dict.items():
 
         # take the average of each set df and put the column into the avg df
-
         avg_df[k] = v.mean(axis=1)
 
-        # avg_df[k] = sum(v) / len(v)
-
-    # # add the x column back in
+    # add the x column back in so we can use it for plotting later
     avg_df["x"] = df["x"]
 
-    # sort the columns numerically - its just upsetting to look at otherwise
+    # sort the columns numerically - its just annoying to look at otherwise
     avg_df = avg_df.reindex(sorted(avg_df.columns), axis=1)
-
-    print(avg_df.head())
 
     return avg_df
 
@@ -127,7 +105,7 @@ def plot_set_averages(tuple):
 
 
 def plot_big_average(tuple):
-    """Accept  tuple of (name, df) and save a png of the plot of x / (average of all sets)"""
+    """Accept tuple of (name, df) and save a png of the plot of x / (average of all sets)"""
 
     name = tuple[0]
     df = tuple[1]
